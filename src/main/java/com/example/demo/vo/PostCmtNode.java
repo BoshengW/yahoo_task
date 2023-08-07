@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -30,5 +31,6 @@ public class PostCmtNode {
         this.user = rawVO.getUser();
         this.comment = rawVO.getComment();
         this.timestamp = rawVO.getTimestamp();
+        this.childs = new ArrayList<>();
     }
 }

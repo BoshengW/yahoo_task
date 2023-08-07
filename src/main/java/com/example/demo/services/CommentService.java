@@ -24,10 +24,8 @@ public class CommentService {
     public static final String COMMENTURL = "https://gist.githubusercontent.com/jaredpetker/3541eb360a9836ad09eb94cffd946645/raw/05772483c421c4feba669425c9557a2c0a0f0416/comments.json";
 
     List<PostCmtNode> tree = new ArrayList<>();
-    HashMap<UUID, HashMap<UUID, RawCmtVO>> graph = new HashMap<>();
     HashMap<UUID, RawCmtVO> lookup = new HashMap<>();
     HashMap<UUID, PostCmtNode> lookup2 = new HashMap<>();
-    List<RawCmtVO> roots = new ArrayList<>();
 
     public JSONObject loadDataModel() throws Exception {
         URL url = new URL(COMMENTURL);
@@ -66,17 +64,16 @@ public class CommentService {
             RawCmtVO item = lookup.get(id);
             PostCmtNode pItem = lookup2.get(id);
             if (item.getParent()==null) {
-                tree.add(pItem);
+                this.tree.add(pItem);
             } else {
                 RawCmtVO parent = lookup.get(item.getParent());
-                if (parent != null) {
-
+                PostCmtNode parent2 = lookup2.get(item.getParent());
+                if (parent2 != null) {
+                    parent2.getChilds().add(pItem);
                 }
             }
-
         }
-
-
+        System.out.println("done");
     }
 
 

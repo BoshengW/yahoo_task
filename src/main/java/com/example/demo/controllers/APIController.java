@@ -3,6 +3,7 @@ package com.example.demo.controllers;
 import com.example.demo.services.CommentService;
 import com.example.demo.vo.PostCmtNode;
 import com.example.demo.vo.RawCmtVO;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,8 +30,29 @@ public class APIController {
     }
 
     @RequestMapping(path="comments", method= RequestMethod.GET)
-    public List<PostCmtNode> getRawDataResult() throws Exception {
-        return commentService.getTree();
+    public String getRawDataResult() throws Exception {
+        List<PostCmtNode> tree = commentService.getTree();
+        JSONObject response = new JSONObject();
+        for (PostCmtNode root: tree) {
+            response.put(root.getId().toString(), convertTreeToJson(root));
+        }
+
+        return response.toString();
+    }
+
+    public static JSONObject convertTreeToJson(PostCmtNode node) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("id", node);
+
+        if (node.getChilds() != null && !node.getChilds().isEmpty()) {
+            JSONArray jsonArray = new JSONArray();
+            for (PostCmtNode child : node.getChilds()) {
+                jsonArray.put(convertTreeToJson(child));
+            }
+            jsonObject.put("children", jsonArray);
+        }
+
+        return jsonObject;
     }
 
 
