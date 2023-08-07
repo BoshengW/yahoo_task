@@ -84,7 +84,7 @@ public class CommentService {
     }
 
     public List<PostCmtNode> getTree() {
-        return this.getTree();
+        return this.tree;
     }
 
 }
